@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - BVFELON</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rajdhani', sans-serif;
+      color: #00ffcc; /* Neon cyan */
+      overflow: hidden;
+      background: #0a0a0a; /* Dark background */
+    }
+
+    /* Animated Background */
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(-45deg, #0a0a0a, #1a1a1a, #2a1e35, #3a1f5a);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Signup Page Styles */
+    .signup-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .signup-page h1 {
+      font-size: 4rem;
+      color: #ff00ff; /* Neon pink */
+      font-family: 'Exo 2', sans-serif;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+      animation: slideIn 1.5s ease-in-out;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .auth-form input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #00ffcc; /* Neon cyan */
+      background-color: rgba(10, 10, 10, 0.8);
+      color: #00ffcc; /* Neon cyan */
+      font-family: 'Rajdhani', sans-serif;
+      text-align: center;
+    }
+
+    .auth-form input::placeholder {
+      color: #00ffcc; /* Neon cyan */
+      opacity: 0.7;
+    }
+
+    .auth-form button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ff00ff; /* Neon pink */
+      color: #0a0a0a; /* Dark background */
+      border: none;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+
+    .auth-form button:hover {
+      background-color: #cc00cc; /* Darker neon pink */
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div id="background"></div>
+
+  <!-- Sign-Up Page -->
+  <div class="signup-page" id="signupPage">
+    <h1>Sign Up - BVFELON</h1>
+
+    <!-- Sign-Up Form -->
+    <div class="auth-form">
+      <input type="text" id="signupUsername" placeholder="Enter Username" required>
+      <input type="email" id="signupEmail" placeholder="Enter Email" required>
+      <input type="password" id="signupPassword" placeholder="Enter Password" required>
+      <button onclick="signUp()">Sign Up</button>
+      <p>Already have an account? <a href="index.html">Log In</a></p>
+    </div>
+  </div>
+
+  <!-- Firebase Configuration and Sign Up Script -->
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // DOM Elements
+    const signupUsername = document.getElementById('signupUsername');
+    const signupEmail = document.getElementById('signupEmail');
+    const signupPassword = document.getElementById('signupPassword');
+
+    // Sign Up Function
+    function signUp() {
+      const username = signupUsername.value;
+      const email = signupEmail.value;
+      const password = signupPassword.value;
+
+      if (email && password && username) {
+        auth.createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            // User signed up successfully
+            const user = userCredential.user;
+            user.updateProfile({
+              displayName: username
+            }).then(() => {
+              alert("Account created successfully! Welcome, " + username);
+              window.location.href = "index.html";  // Redirect to login page after signup
+            }).catch((error) => {
+              alert("Error updating username: " + error.message);
+            });
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert("Error: " + errorMessage);
+          });
+      } else {
+        alert("Please enter a username, email, and password.");
+      }
+    }
+  </script>
+</body>
+</html>
