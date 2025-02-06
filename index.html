@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bvfelon.com</title>
+  <style>
+    /* General Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rajdhani', sans-serif;
+      color: #00ffcc; /* Neon cyan */
+      overflow: hidden;
+      background: #0a0a0a; /* Dark background */
+    }
+
+    /* Animated Background */
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(-45deg, #0a0a0a, #1a1a1a, #2a1e35, #3a1f5a);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Login Page Styles */
+    .login-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .login-page h1 {
+      font-size: 4rem;
+      color: #ff00ff; /* Neon pink */
+      font-family: 'Exo 2', sans-serif;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+      animation: slideIn 1.5s ease-in-out;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .auth-form input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #00ffcc; /* Neon cyan */
+      background-color: rgba(10, 10, 10, 0.8);
+      color: #00ffcc; /* Neon cyan */
+      font-family: 'Rajdhani', sans-serif;
+      text-align: center;
+    }
+
+    .auth-form input::placeholder {
+      color: #00ffcc; /* Neon cyan */
+      opacity: 0.7;
+    }
+
+    .auth-form button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ff00ff; /* Neon pink */
+      color: #0a0a0a; /* Dark background */
+      border: none;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+
+    .auth-form button:hover {
+      background-color: #cc00cc; /* Darker neon pink */
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      color: #00ffcc; /* Neon cyan */
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      color: #ff00ff; /* Neon pink */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #cc00cc; /* Darker neon pink */
+      text-decoration: underline;
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .main-content h2 {
+      font-size: 3rem;
+      color: #ff00ff; /* Neon pink */
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    }
+
+    .chat-container {
+      border: 2px solid #00ffcc; /* Neon cyan */
+      border-radius: 10px;
+      padding: 20px;
+      background-color: rgba(10, 10, 10, 0.8);
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.5); /* Neon cyan glow */
+    }
+
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #00ffcc; /* Neon cyan */
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: rgba(10, 10, 10, 0.8);
+    }
+
+    .chat-box p {
+      margin: 5px 0;
+      text-align: left;
+    }
+
+    .chat-box .owner {
+      color: #ff00ff; /* Neon pink */
+      font-weight: bold;
+    }
+
+    .chat-box .user {
+      color: #00ffcc; /* Neon cyan */
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #00ffcc; /* Neon cyan */
+      background-color: rgba(10, 10, 10, 0.8);
+      color: #00ffcc; /* Neon cyan */
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .chat-input button {
+      padding: 10px 20px;
+      background-color: #ff00ff; /* Neon pink */
+      color: #0a0a0a; /* Dark background */
+      border: none;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+
+    .chat-input button:hover {
+      background-color: #cc00cc; /* Darker neon pink */
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+  <!-- Google Fonts: Rajdhani and Exo 2 -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div id="background"></div>
+
+  <!-- Login Page -->
+  <div class="login-page" id="loginPage">
+    <h1>BVFELON</h1>
+
+    <!-- Sign-Up Form -->
+    <div id="signUpForm" class="auth-form">
+      <input type="email" id="signUpEmail" placeholder="Enter Email" required>
+      <input type="password" id="signUpPassword" placeholder="Enter Password" required>
+      <button onclick="signUp()">Sign Up</button>
+      <p>Already have an account? <a href="#" onclick="showLoginForm()">Log In</a></p>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="auth-form hidden">
+      <input type="email" id="loginEmail" placeholder="Enter Email" required>
+      <input type="password" id="loginPassword" placeholder="Enter Password" required>
+      <button onclick="login()">Log In</button>
+      <p>Don't have an account? <a href="#" onclick="showSignUpForm()">Sign Up</a></p>
+    </div>
+
+    <!-- Footer with Instagram -->
+    <div class="footer">
+      Developed by <a href="https://www.instagram.com/bvfelon" target="_blank">@bvfelon</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <h2>Welcome to bvfelon.com</h2>
+    <div class="dashboard">
+      <!-- Chat Container -->
+      <div class="chat-container">
+        <div class="chat-box" id="chatBox">
+          <!-- Chat messages will appear here -->
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Type your message...">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID",
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // DOM Elements
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
+
+    // Listen for Auth State Changes
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is logged in
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+
+        // Show warning message
+        alert('Note: The chat will be erased in 24 hours.');
+
+        // Load chat messages
+        loadChatMessages();
+
+        // Listen for new messages
+        listenForNewMessages();
+      } else {
+        // User is logged out
+        document.getElementById('loginPage').style.display = 'block';
+        document.getElementById('mainContent').style.display = 'none';
+      }
+    });
+
+    // Load Chat Messages
+    function loadChatMessages() {
+      db.collection('messages')
+        .orderBy('timestamp')
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const message = doc.data();
+            displayMessage(message);
+          });
+        })
+        .catch((error) => {
+          console.error('Error loading messages: ', error);
+        });
+    }
+
+    // Listen for New Messages
+    function listenForNewMessages() {
+      db.collection('messages')
+        .orderBy('timestamp')
+        .onSnapshot((snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === 'added') {
+              const message = change.doc.data();
+              displayMessage(message);
+            }
+          });
+        });
+    }
+
+    // Display Message in Chat Box
+    function displayMessage(message) {
+      const messageElement = document.createElement('p');
+      messageElement.innerHTML = `
+        <span class="${message.role.toLowerCase()}">${message.username}</span>
+        <span> (Level ${message.level}): ${message.text}</span>
+      `;
+      chatBox.appendChild(messageElement);
+      chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
+    }
+
+    // Send Message
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (text) {
+        const user = auth.currentUser;
+        if (user) {
+          const message = {
+            username: user.displayName || user.email,
+            text: text,
+            role: user.email === 'felon@example.com' ? 'Owner' : 'User', // Example role logic
+            level: 1, // Example level logic
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          };
+
+          // Add message to Firestore
+          db.collection('messages').add(message)
+            .then(() => {
+              chatInput.value = ''; // Clear input field
+            })
+            .catch((error) => {
+              console.error('Error sending message: ', error);
+            });
+        }
+      }
+    }
+
+    // Allow sending messages by pressing Enter
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
