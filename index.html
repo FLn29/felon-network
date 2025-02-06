@@ -121,9 +121,6 @@
   </style>
   <!-- Google Fonts: Rajdhani and Exo 2 -->
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
 </head>
 <body>
   <!-- Animated Background -->
@@ -135,10 +132,8 @@
 
     <!-- Login Form -->
     <div id="loginForm" class="auth-form">
-      <input type="email" id="loginEmail" placeholder="Enter Email" required>
-      <input type="password" id="loginPassword" placeholder="Enter Password" required>
+      <input type="text" id="username" placeholder="Enter Username" required>
       <button onclick="login()">Log In</button>
-      <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
     </div>
 
     <!-- Footer with Instagram -->
@@ -147,43 +142,20 @@
     </div>
   </div>
 
-  <!-- Firebase Configuration and Script -->
+  <!-- Script -->
   <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID",
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // DOM Elements
-    const loginEmail = document.getElementById('loginEmail');
-    const loginPassword = document.getElementById('loginPassword');
-
     // Login Function
     function login() {
-      const email = loginEmail.value;
-      const password = loginPassword.value;
+      const username = document.getElementById('username').value;
 
-      if (email && password) {
-        auth.signInWithEmailAndPassword(email, password)
-          .then((userCredential) => {
-            const user = userCredential.user;
-            alert("Login successful! Welcome, " + user.email);
-            window.location.href = "main.html"; // Redirect to main page
-          })
-          .catch((error) => {
-            alert("Error: " + error.message);
-          });
+      if (username) {
+        // Save the username to localStorage (optional)
+        localStorage.setItem('username', username);
+
+        // Redirect to main.html
+        window.location.href = "main.html";
       } else {
-        alert("Please enter your email and password.");
+        alert("Please enter a username.");
       }
     }
   </script>
