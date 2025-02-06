@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - bvfelon.com</title>
+  <title>BVFELON</title>
   <style>
     /* General Styles */
     body {
@@ -148,7 +147,7 @@
     </div>
   </div>
 
-  <!-- Firebase Configuration and Login Script -->
+  <!-- Firebase Configuration and Script -->
   <script>
     // Firebase Configuration
     const firebaseConfig = {
@@ -176,76 +175,16 @@
       if (email && password) {
         auth.signInWithEmailAndPassword(email, password)
           .then((userCredential) => {
-            // Signed in successfully, redirect to main content
             const user = userCredential.user;
             alert("Login successful! Welcome, " + user.email);
-            window.location.href = "main.html";  // Redirect to main page
+            window.location.href = "main.html"; // Redirect to main page
           })
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert("Error: " + errorMessage);
+            alert("Error: " + error.message);
           });
       } else {
         alert("Please enter your email and password.");
       }
-    }
-  </script>
-</body>
-</html>
-<div id="loginPage">
-  <!-- Login Form -->
-  <input type="email" id="loginEmail" placeholder="Email">
-  <input type="password" id="loginPassword" placeholder="Password">
-  <button onclick="login()">Log In</button>
-</div>
-<div id="mainContent" style="display: none;">
-  <!-- Chat Box -->
-  <div id="chatBox"></div>
-  <input type="text" id="chatInput" placeholder="Type a message...">
-</div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Site with Background Music</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0a0a0a;
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
-  <h1>Welcome to My Site</h1>
-  <p>Enjoy the background music!</p>
-
-  <!-- Background Music -->
-  <audio id="backgroundMusic" autoplay loop>
-    <source src="https://your-file-hosting-link.com/audio.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-  <!-- Optional: Add controls for testing -->
-  <div>
-    <button onclick="playMusic()">Play Music</button>
-    <button onclick="pauseMusic()">Pause Music</button>
-  </div>
-
-  <script>
-    // JavaScript to control the audio
-    const backgroundMusic = document.getElementById('backgroundMusic');
-
-    function playMusic() {
-      backgroundMusic.play();
-    }
-
-    function pauseMusic() {
-      backgroundMusic.pause();
     }
   </script>
 </body>
