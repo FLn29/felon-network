@@ -109,3 +109,26 @@ const firebaseConfig = {
       sendMessage();
     }
   });
+function login() {
+  const email = loginEmail.value;
+  const password = loginPassword.value;
+
+  console.log("Email:", email); // Debugging
+  console.log("Password:", password); // Debugging
+
+  if (email && password) {
+    auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Login successful! User:", user); // Debugging
+        alert("Login successful! Welcome, " + user.email);
+        window.location.href = "main.html"; // Redirect to main page
+      })
+      .catch((error) => {
+        console.error("Error:", error); // Debugging
+        alert("Error: " + error.message);
+      });
+  } else {
+    alert("Please enter your email and password.");
+  }
+}
