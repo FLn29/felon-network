@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,80 +109,6 @@
       text-decoration: underline;
     }
 
-    /* Main Content Styles */
-    .main-content {
-      display: none;
-      padding: 20px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    .main-content h2 {
-      font-size: 3rem;
-      color: #ff00ff; /* Neon pink */
-      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-    }
-
-    .chat-container {
-      border: 2px solid #00ffcc; /* Neon cyan */
-      border-radius: 10px;
-      padding: 20px;
-      background-color: rgba(10, 10, 10, 0.8);
-      box-shadow: 0 0 20px rgba(0, 255, 204, 0.5); /* Neon cyan glow */
-    }
-
-    .chat-box {
-      height: 300px;
-      overflow-y: auto;
-      border: 1px solid #00ffcc; /* Neon cyan */
-      border-radius: 5px;
-      padding: 10px;
-      margin-bottom: 10px;
-      background-color: rgba(10, 10, 10, 0.8);
-    }
-
-    .chat-box p {
-      margin: 5px 0;
-      text-align: left;
-    }
-
-    .chat-box .owner {
-      color: #ff00ff; /* Neon pink */
-      font-weight: bold;
-    }
-
-    .chat-box .user {
-      color: #00ffcc; /* Neon cyan */
-    }
-
-    .chat-input {
-      display: flex;
-      gap: 10px;
-    }
-
-    .chat-input input {
-      flex: 1;
-      padding: 10px;
-      border: 2px solid #00ffcc; /* Neon cyan */
-      background-color: rgba(10, 10, 10, 0.8);
-      color: #00ffcc; /* Neon cyan */
-      font-family: 'Rajdhani', sans-serif;
-    }
-
-    .chat-input button {
-      padding: 10px 20px;
-      background-color: #ff00ff; /* Neon pink */
-      color: #0a0a0a; /* Dark background */
-      border: none;
-      cursor: pointer;
-      font-family: 'Rajdhani', sans-serif;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease;
-    }
-
-    .chat-input button:hover {
-      background-color: #cc00cc; /* Darker neon pink */
-    }
-
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -198,7 +125,6 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js"></script>
 </head>
 <body>
   <!-- Animated Background -->
@@ -222,23 +148,7 @@
     </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content" id="mainContent">
-    <h2>Welcome to bvfelon.com</h2>
-    <div class="dashboard">
-      <!-- Chat Container -->
-      <div class="chat-container">
-        <div class="chat-box" id="chatBox">
-          <!-- Chat messages will appear here -->
-        </div>
-        <div class="chat-input">
-          <input type="text" id="chatInput" placeholder="Type your message...">
-          <button onclick="sendMessage()">Send</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <!-- Firebase Configuration and Login Script -->
   <script>
     // Firebase Configuration
     const firebaseConfig = {
@@ -253,107 +163,33 @@
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
 
     // DOM Elements
-    const chatBox = document.getElementById('chatBox');
-    const chatInput = document.getElementById('chatInput');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
 
-    // Listen for Auth State Changes
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        // User is logged in
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('mainContent').style.display = 'block';
+    // Login Function
+    function login() {
+      const email = loginEmail.value;
+      const password = loginPassword.value;
 
-        // Show warning message
-        alert('Note: The chat will be erased in 24 hours.');
-
-        // Load chat messages
-        loadChatMessages();
-
-        // Listen for new messages
-        listenForNewMessages();
+      if (email && password) {
+        auth.signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            // Signed in successfully, redirect to main content
+            const user = userCredential.user;
+            alert("Login successful! Welcome, " + user.email);
+            window.location.href = "main.html";  // Redirect to main page
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert("Error: " + errorMessage);
+          });
       } else {
-        // User is logged out
-        document.getElementById('loginPage').style.display = 'block';
-        document.getElementById('mainContent').style.display = 'none';
-      }
-    });
-
-    // Load Chat Messages
-    function loadChatMessages() {
-      db.collection('messages')
-        .orderBy('timestamp')
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            const message = doc.data();
-            displayMessage(message);
-          });
-        })
-        .catch((error) => {
-          console.error('Error loading messages: ', error);
-        });
-    }
-
-    // Listen for New Messages
-    function listenForNewMessages() {
-      db.collection('messages')
-        .orderBy('timestamp')
-        .onSnapshot((snapshot) => {
-          snapshot.docChanges().forEach((change) => {
-            if (change.type === 'added') {
-              const message = change.doc.data();
-              displayMessage(message);
-            }
-          });
-        });
-    }
-
-    // Display Message in Chat Box
-    function displayMessage(message) {
-      const messageElement = document.createElement('p');
-      messageElement.innerHTML = `
-        <span class="${message.role.toLowerCase()}">${message.username}</span>
-        <span> (Level ${message.level}): ${message.text}</span>
-      `;
-      chatBox.appendChild(messageElement);
-      chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
-    }
-
-    // Send Message
-    function sendMessage() {
-      const text = chatInput.value.trim();
-      if (text) {
-        const user = auth.currentUser;
-        if (user) {
-          const message = {
-            username: user.displayName || user.email,
-            text: text,
-            role: user.email === 'felon@example.com' ? 'Owner' : 'User', // Example role logic
-            level: 1, // Example level logic
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          };
-
-          // Add message to Firestore
-          db.collection('messages').add(message)
-            .then(() => {
-              chatInput.value = ''; // Clear input field
-            })
-            .catch((error) => {
-              console.error('Error sending message: ', error);
-            });
-        }
+        alert("Please enter your email and password.");
       }
     }
-
-    // Allow sending messages by pressing Enter
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        sendMessage();
-      }
-    });
   </script>
 </body>
 </html>
