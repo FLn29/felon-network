@@ -204,3 +204,49 @@
   <div id="chatBox"></div>
   <input type="text" id="chatInput" placeholder="Type a message...">
 </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site with Background Music</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0a0a0a;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to My Site</h1>
+  <p>Enjoy the background music!</p>
+
+  <!-- Background Music -->
+  <audio id="backgroundMusic" autoplay loop>
+    <source src="https://your-file-hosting-link.com/audio.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Optional: Add controls for testing -->
+  <div>
+    <button onclick="playMusic()">Play Music</button>
+    <button onclick="pauseMusic()">Pause Music</button>
+  </div>
+
+  <script>
+    // JavaScript to control the audio
+    const backgroundMusic = document.getElementById('backgroundMusic');
+
+    function playMusic() {
+      backgroundMusic.play();
+    }
+
+    function pauseMusic() {
+      backgroundMusic.pause();
+    }
+  </script>
+</body>
+</html>
