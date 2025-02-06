@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Page - BVFELON</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rajdhani', sans-serif;
+      background: #0a0a0a; /* Dark background */
+      color: #00ffcc; /* Neon cyan */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #ff00ff; /* Neon pink */
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome, <span id="displayUsername"></span>!</h1>
+
+  <script>
+    // Retrieve the username from localStorage
+    const username = localStorage.getItem('username');
+
+    if (username) {
+      // Display the username
+      document.getElementById('displayUsername').textContent = username;
+    } else {
+      // If no username is found, redirect back to the login page
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
