@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - BVFELON</title>
+  <title>Sign Up - bvfelon.com</title>
   <style>
-    /* General Styles */
+    /* Reuse the same styles as your login page */
     body {
       margin: 0;
       padding: 0;
@@ -15,7 +15,6 @@
       background: #0a0a0a; /* Dark background */
     }
 
-    /* Animated Background */
     #background {
       position: fixed;
       top: 0;
@@ -34,7 +33,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Signup Page Styles */
     .signup-page {
       display: flex;
       flex-direction: column;
@@ -90,7 +88,24 @@
       background-color: #cc00cc; /* Darker neon pink */
     }
 
-    /* Animations */
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      color: #00ffcc; /* Neon cyan */
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      color: #ff00ff; /* Neon pink */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #cc00cc; /* Darker neon pink */
+      text-decoration: underline;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -101,30 +116,27 @@
       to { transform: translateY(0); opacity: 1; }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
 </head>
 <body>
-  <!-- Animated Background -->
   <div id="background"></div>
-
-  <!-- Sign-Up Page -->
   <div class="signup-page" id="signupPage">
-    <h1>Sign Up - BVFELON</h1>
-
-    <!-- Sign-Up Form -->
-    <div class="auth-form">
-      <input type="text" id="signupUsername" placeholder="Enter Username" required>
+    <h1>Sign Up</h1>
+    <div id="signupForm" class="auth-form">
       <input type="email" id="signupEmail" placeholder="Enter Email" required>
       <input type="password" id="signupPassword" placeholder="Enter Password" required>
-      <button onclick="signUp()">Sign Up</button>
+      <button onclick="signup()">Sign Up</button>
       <p>Already have an account? <a href="index.html">Log In</a></p>
+    </div>
+    <div class="footer">
+      Developed by <a href="https://www.instagram.com/bvfelon" target="_blank">@bvfelon</a>
     </div>
   </div>
 
-  <!-- Firebase Configuration and Sign Up Script -->
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
   <script>
-    // Firebase Configuration
+    // Firebase Configuration (same as in index.html)
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_AUTH_DOMAIN",
@@ -138,38 +150,23 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // DOM Elements
-    const signupUsername = document.getElementById('signupUsername');
-    const signupEmail = document.getElementById('signupEmail');
-    const signupPassword = document.getElementById('signupPassword');
-
     // Sign Up Function
-    function signUp() {
-      const username = signupUsername.value;
-      const email = signupEmail.value;
-      const password = signupPassword.value;
+    function signup() {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
 
-      if (email && password && username) {
+      if (email && password) {
         auth.createUserWithEmailAndPassword(email, password)
           .then((userCredential) => {
-            // User signed up successfully
             const user = userCredential.user;
-            user.updateProfile({
-              displayName: username
-            }).then(() => {
-              alert("Account created successfully! Welcome, " + username);
-              window.location.href = "index.html";  // Redirect to login page after signup
-            }).catch((error) => {
-              alert("Error updating username: " + error.message);
-            });
+            alert("Sign up successful! Welcome, " + user.email);
+            window.location.href = "main.html"; // Redirect to main page
           })
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert("Error: " + errorMessage);
+            alert("Error: " + error.message);
           });
       } else {
-        alert("Please enter a username, email, and password.");
+        alert("Please enter your email and password.");
       }
     }
   </script>
